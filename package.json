@@ -1,0 +1,23 @@
+{
+  "name": "sabichoso",
+  "version": "1.0.0",
+  "description": "Telegram bot to get information for different things (gas prices, movies, etc..)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "telegraf"
+  ],
+  "author": "Máximo De León <maximodleon@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "6.0.0",
+    "npm": "6.2.0",
+    "puppeteer": "1.6.0",
+    "telegraf": "3.21.2"
+  }
+}
