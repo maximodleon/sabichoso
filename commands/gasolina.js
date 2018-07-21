@@ -1,26 +1,36 @@
 const htmlHelper = require('../helpers/html-helper.js')
 const browserHelper = require('../helpers/browser-helper.js')
 const puppeteer = require('puppeteer')
-const { GAS_PRICE_URL, GAS_PRICE_STYLES, FONT_AWESOME_LINK } = require('../constants/index.js')
+const { 
+ GAS_PRICE_URL, 
+ GAS_PRICE_STYLES, 
+ PUMP_ICON
+} = require('../constants/index.js')
+require('dotenv').config()
+const { BOT_NAME } = process.env
 
 const getGasPrices = (bot) => {
-  bot.command('gasolina', executeCommand)
+  commands = ['gasolina', 'combustible', `gasolina@${BOT_NAME}`, `combustible@${BOT_NAME}`]
+  console.log(BOT_NAME)
+  bot.command(commands, executeCommand)
 }
 
 const executeCommand = async (ctx) => {
- ctx.reply('lo busco y te lo mando...')
+ ctx.reply('déjame buscarlo y te lo mando...')
+ console.log('ejecutando el comando gasolina...')
  const browser = await puppeteer.launch()
  const { table, caption } = await getTableAndCaption(browser)
- const link = [`<link rel="stylesheet" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous" href="${FONT_AWESOME_LINK}" />`]
  const body = getBody(table, caption)
- const html = htmlHelper.getHTML(body, GAS_PRICE_STYLES, link)
+ const html = htmlHelper.getHTML(body, GAS_PRICE_STYLES)
  await browserHelper.generateScreenshot(browser, html, 'div', 2, 'gas.png')
+ console.log('respondiendo')
+ ctx.replyWithPhoto({ source: 'gas.png' }, { caption: 'Aqui están los precios.' })
  await browser.close()
- ctx.replyWithPhoto({ source: 'gas.png' }, { caption: 'Estos son los precios para esta semana' })
 }
 
 const getTableAndCaption = async (browser) => {
  const page = await browser.newPage()
+ browserHelper.setupPageLoading(page)
  await page.goto(GAS_PRICE_URL)
  const table = await page.evaluate(() => document.querySelector('table > tbody').outerHTML)
  const caption = await page.evaluate(() => document.querySelector('h2').innerHTML) 
@@ -32,7 +42,7 @@ const getBody = (table, caption) => {
   return `
    <div class="container">
     <div class="caption">
-      <i class="fas fa-gas-pump"></i>
+     <span class="gas-pump">${PUMP_ICON}</span> 
       <div class="header">
         <h3> Precios combustibles </h3>
         <span>${caption}</span>

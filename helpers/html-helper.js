@@ -1,5 +1,5 @@
 
-const getHTML = (body, style, link) => {
+const getHTML = (body, style, link = []) => {
  return `
   <html>
   <style>
