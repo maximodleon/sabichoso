@@ -11,7 +11,6 @@ const { BOT_NAME } = process.env
 
 const getGasPrices = (bot) => {
   commands = ['gasolina', 'combustible', `gasolina@${BOT_NAME}`, `combustible@${BOT_NAME}`]
-  console.log(BOT_NAME)
   bot.command(commands, executeCommand)
 }
 
