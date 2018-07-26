@@ -41,7 +41,7 @@ const getBody = (table, caption) => {
   return `
    <div class="container">
     <div class="caption">
-     <span class="gas-pump">${PUMP_ICON}</span> 
+     <span class="gas-pump">${PUMP_ICON}</span>
       <div class="header">
         <h3> Precios combustibles </h3>
         <span>${caption}</span>

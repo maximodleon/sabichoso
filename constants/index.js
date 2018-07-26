@@ -20,7 +20,7 @@ td  {
 h3 { color: #ff4c4c; text-transform: uppercase; line-height: 1.2rem; font-size: 20px; margin-bottom: 4px;}
 div.container { width: 36%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 `
-const PUMP_ICON = '&#9981;'
+const PUMP_ICON = '⛽'
 
 module.exports = {
   GAS_PRICE_STYLES,
