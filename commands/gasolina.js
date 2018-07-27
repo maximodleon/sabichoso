@@ -17,7 +17,7 @@ const getGasPrices = (bot) => {
 const executeCommand = async (ctx) => {
   ctx.reply('déjame buscarlo y te lo mando...')
   console.log('ejecutando el comando gasolina...')
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const { table, caption } = await getTableAndCaption(browser)
   const body = getBody(table, caption)
   const html = htmlHelper.getHTML(body, GAS_PRICE_STYLES)
