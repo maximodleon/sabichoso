@@ -5,7 +5,7 @@ body {  font-family: 'Helvetica', sans-serif; box-sizing: border-box; }
 table { border-collapse: collapse; boder: 1px solid;}
 div.caption { display: flex; wrap-text: break-word; padding: 0 0 10px 0; height: 75px; }
 div.header { margin: 0 0 0 10px; padding: 0; width: 260px; }
-span { color: #ff4c4c; font-size: 13px; }
+span { color: #ff4c4c; font-size: 11px; }
 img { width: 50px; }
 tr > td:first-child { background-color: #aaaaaa; padding: 4px 6px; text-align: left; vertical-align: middle; border: 1px solid #fff; font-size: 15px; }
 td  {
