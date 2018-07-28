@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { font-family:  'Arial', 'Courier New', sans-serif; width: 270px; height: 215px;   }
+
+* { margin: 0; }
+
+svg { fill: white; padding: 0; height: 74px; width: 72px; position: fixed; left: 1px; }
+
+h4 { margin: 0; color: white; }
+
+h1 { font-size: 100px; color: white; margin-left: 26px; }
+
+h5 { color: white; align-self: center; font-size: 22px; }
+
+.container { display: flex; flex-direction: column; background: linear-gradient(to bottom, #49c0f0 0%,#2cafe3 100%); align-items: center; width: 300px; height: 300px; padding: 15px;}
+
+.icon-degree { display: flex; height: 75px; }
+
+.city-date { display: flex; flex-direction: column; align-self: center; position: fixed; left: 87px; width: 225px; }
+
+.city-date > h6 { align-self: center; color: white; font-size: 16px; }
+
+.separator { height: 40px; margin: 15px 0 0 10px; border: 1px solid white; position: fixed; left: 70px; }
+
+</style>
+</head>
+<body>
+<div class="container">
+<div class="icon-degree">
+  {{{icon}}}
+  <div class='separator' ></div>
+  <div class="city-date">
+    <h5>{{city}}</h5>
+    <h6>{{date}}</h6>
+  </div>
+</div>
+  <h1>{{temp}}&#176;</h1>
+  <h5>{{forecast}}</h5>
+</div>
+</body>
+</html>
