@@ -10,6 +10,7 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once",
     "commit": "git-cz"
   },
   "keywords": [
