@@ -5,7 +5,6 @@ const { BOT_NAME } = process.env
 const executeCommand = (ctx) => {
   const filtered = phrases.filter((phrase) => phrase.category === 'motivación')
   const phrase = filtered[Math.floor(Math.random() * filtered.length)]
-  console.log('yes')
   ctx.replyWithMarkdown(`
   _${phrase.phrase}_
   *${phrase.author}*
