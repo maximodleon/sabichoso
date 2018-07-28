@@ -1,7 +1,7 @@
 
-const generateScreenshot = async (browser, html, selector, padding = 0, filename) => {
+const generateScreenshot = async (browser, html, selector, padding = 0, filename, scaleFactor = 2) => {
   const page = await browser.newPage()
-  await page.setViewport({ width: 1000, height: 600, deviceScaleFactor: 2 }) // hit desktop breakpoint
+  await page.setViewport({ width: 1000, height: 600, deviceScaleFactor: scaleFactor }) // hit desktop breakpoint
   await page.goto(`data:text/html;charset=UTF-8,${html}`)
   const rect = await page.evaluate(selector => {
     const element = document.querySelector(selector)
