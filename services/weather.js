@@ -22,9 +22,9 @@ const getWeatherCondition = async (extraParams) => {
 const generateWeatherScreenshotForCity = async (cityId) => {
   const { data } = await getWeatherCondition({ id: cityId })
   const icon = fs.readFileSync(`./assets/icons/${data.weather[0].icon}.svg`)
-  const template = templateHelper.loadAndRenderTemplate('weather', { icon, city: `${data.name}, ${data.sys.country}`, forecast: data.weather[0].description, temp: Math.floor(data.main.temp), date: getWeatherDateString(data.dt) })
+  const template = templateHelper.loadAndRenderTemplate('weather', { icon, city: data.name, forecast: data.weather[0].description, temp: Math.floor(data.main.temp), date: getWeatherDateString(data.dt), min: Math.floor(data.main.temp_min), max: Math.floor(data.main.temp_max) })
   const browser = await puppeteer.launch()
-  await browserHelper.generateScreenshot(browser, template, 'body', 2, 'weather.png', 1.2)
+  await browserHelper.generateScreenshot(browser, template, 'body', 2, 'weather.png', 1.8)
 }
 
 const getWeatherDateString = (miliseconds) => {
