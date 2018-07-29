@@ -7,9 +7,8 @@ const weatherService = require('../services/weather')
 const executeCommand = async (ctx) => {
   const searchCity = ctx.message.text.replace('/clima', '').trim().toLowerCase()
   const cities = cityList.filter((city) => city.name.toLowerCase() === searchCity)
-  let results
   if (cities.length > 1) {
-    results = cities.map((city) => [Markup.callbackButton(city.country, `weather:${city.id}`)])
+    const results = cities.map((city) => [Markup.callbackButton(city.country, `weather:${city.id}`)])
     const keyboard = Markup.inlineKeyboard(results)
     ctx.reply('de que pais', keyboard.resize().extra())
   } else if (cities.length === 1) {
