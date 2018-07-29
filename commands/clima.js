@@ -32,12 +32,12 @@ const getWeatherForCity = (bot) => {
 }
 
 const getSlicedArray = (resultsArray) => {
- return resultsArray.reduce((result, value, index, array) => {
-   if(index%2===0) {
-   result.push(array.slice(index, index + 2))
-  }
- return result
-}, [])
+  return resultsArray.reduce((result, value, index, array) => {
+    if (index % 2 === 0) {
+      result.push(array.slice(index, index + 2))
+    }
+    return result
+  }, [])
 }
 
 module.exports = {
