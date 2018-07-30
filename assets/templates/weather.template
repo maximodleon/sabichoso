@@ -15,10 +15,10 @@ body {
 .container {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 100px 150px auto;
+  grid-template-rows: 100px 200px auto;
   background: linear-gradient(to bottom, #49c0f0 0%,#2cafe3 100%);
   width: 500px;
-  height: 400px;
+  height: 470px;
   justify-items: center;
 }
 
@@ -45,10 +45,11 @@ h5 {
 h1 {
  grid-row-start: 2;
  grid-row-end: span 1;
- font-size: 200px;
+ font-size: 180px;
  color: white;
  fill: white;
  margin-left: 50px;
+ align-self: center;
 }
 
 h5.description {
@@ -60,7 +61,6 @@ div.description {
  grid-row-start: 3;
  grid-row-end: span 1;
  display: flex;
- margin-top: 25px;
 }
 
 svg {
