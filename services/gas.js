@@ -1,7 +1,7 @@
 const browserHelper = require('../helpers/browser-helper.js')
 const puppeteer = require('puppeteer')
 const templateHelper = require('../helpers/templates-helper')
-const { GAS_PRICE_URL } = require('../constants/index.js')
+const GAS_PRICE_URL = 'https://micm.gob.do/precios-de-combustibles'
 
 const generateGasPriceScreenshot = async () => {
   const browser = await puppeteer.launch({ args: ['--start-maximized'] })
