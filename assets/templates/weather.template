@@ -3,7 +3,7 @@
 <head>
 <style>
 body {
- font-family:  'Helvetica', 'Arial', 'Courier New', sans-serif;
+ font-family:  'Helvetica', 'Arial', 'Courier New', sans-serif; 
  width: 270px;
  height: 215px;
 }
@@ -12,24 +12,9 @@ body {
  margin: 0; 
 }
 
-.minmax {
-  grid-row-start: 3;
-  grid-row-end: span 1;
-  grid-column-start: 1;
-  grid-column-end: span 2;
-  display: flex;
-  align-self: center;
-  margin-right: 20px;
-}
-
-small {
-  color: white;
-  font-size: 18px;
-}
-
 .container {
   display: grid;
-  grid-template-columns: 100px auto;
+  grid-template-columns: auto;
   grid-template-rows: 100px 150px auto;
   background: linear-gradient(to bottom, #49c0f0 0%,#2cafe3 100%);
   width: 500px;
@@ -37,20 +22,7 @@ small {
   justify-items: center;
 }
 
-svg {
-  grid-row-start: 4;
-  grid-row-end: span 1;
-  grid-column-start: 1;
-  grid-column-end: span  1;
-  fill: white;
-  justify-self: center;
-  align-self: center;
-  width: 100px;
-}
-
 .city-date {
- grid-column-start: 1;
- grid-column-end: span 2;
  grid-row-start: 1;
  grid-row-end: span 1;
  display: flex;
@@ -71,45 +43,43 @@ h5 {
 }
 
 h1 {
- grid-column-start: 1;
- grid-column-end: span 2;
  grid-row-start: 2;
  grid-row-end: span 1;
- font-size: 160px;
- margin-left: 55px;
+ font-size: 200px;
  color: white;
  fill: white;
- justify-self: center;
+ margin-left: 50px;
 }
 
 h5.description {
- grid-column-start: 2;
- grid-column-end: span 1;
- grid-row-start: 4;
- grid-row-end: span 1;
  font-size: 25px;
  margin-right: 70px;
+}
+
+div.description {
+ grid-row-start: 3;
+ grid-row-end: span 1;
+ display: flex;
+ margin-top: 25px;
+}
+
+svg {
+  fill: white;
+  width: 100px;
 }
 </style>
 </head>
 <body>
 <div class="container">
-  {{{icon}}}
   <div class="city-date">
     <h5>{{city}}</h5>
     <h6>{{date}}</h6>
   </div>
   <h1>{{temp}}&#176;</h1>
-    <div class="minmax">
-    <small>&#8593; {{max}}</small>
-       &nbsp;
-        &nbsp;
-        &nbsp;
-    &nbsp;
-        &nbsp;
-    <small>&#8595; {{min}}</small>    
+  <div class="description">
+    {{{icon}}}
+    <h5 class="description">{{forecast}}</h5>
   </div>
-  <h5 class="description">{{forecast}}</h5>
 </div>
 </body>
 </html>
