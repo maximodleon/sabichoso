@@ -26,7 +26,7 @@ const setupPageLoading = (page) => {
   page.setRequestInterception(true)
   page.on('request', request => {
     if (
-      request.url().endsWith('.jpg') ||
+      request.url().includes('.jpg') ||
       request.url().includes('.jpeg') ||
       request.url().includes('.png') ||
       request.url().includes('.gif') ||
