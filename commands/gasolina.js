@@ -1,11 +1,8 @@
-const htmlHelper = require('../helpers/html-helper.js')
 const browserHelper = require('../helpers/browser-helper.js')
 const puppeteer = require('puppeteer')
-const {
-  GAS_PRICE_URL,
-  GAS_PRICE_STYLES,
-  PUMP_ICON
-} = require('../constants/index.js')
+const { GAS_PRICE_URL } = require('../constants/index.js')
+const templateHelper = require('../helpers/templates-helper')
+
 require('dotenv').config()
 const { BOT_NAME } = process.env
 
@@ -19,9 +16,8 @@ const executeCommand = async (ctx) => {
   console.log('ejecutando el comando gasolina...')
   const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const { table, caption } = await getTableAndCaption(browser)
-  const body = getBody(table, caption)
-  const html = htmlHelper.getHTML(body, GAS_PRICE_STYLES)
-  await browserHelper.generateScreenshot(browser, html, 'div', 2, 'gas.png')
+  const template = templateHelper.loadAndRenderTemplate('gas', { table, caption })
+  await browserHelper.generateScreenshot(browser, template, 'div', 2, 'gas.png')
   console.log('respondiendo')
   ctx.replyWithPhoto({ source: 'gas.png' }, { caption: 'Aqui están los precios.' })
   await browser.close()
@@ -35,20 +31,6 @@ const getTableAndCaption = async (browser) => {
   const caption = await page.evaluate(() => document.querySelector('h2').innerHTML)
   await page.close()
   return { table, caption }
-}
-
-const getBody = (table, caption) => {
-  return `
-   <div class="container">
-    <div class="caption">
-     <img src="${PUMP_ICON}" />
-      <div class="header">
-        <h3> Precios combustibles </h3>
-        <span>${caption}</span>
-     </div>
-    </div>
-    <table>${table}</table>
-   </div>`
 }
 
 module.exports = {
