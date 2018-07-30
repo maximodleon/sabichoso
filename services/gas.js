@@ -22,5 +22,5 @@ const getTableAndCaption = async (browser) => {
 }
 
 module.exports = {
-generateGasPriceScreenshot
+  generateGasPriceScreenshot
 }
