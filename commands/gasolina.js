@@ -11,7 +11,7 @@ const getGasPrices = (bot) => {
 const executeCommand = async (ctx) => {
   ctx.reply('déjame buscarlo y te lo mando...')
   console.log('ejecutando el comando gasolina...')
-  gasService.generateGasPriceScreenshot()
+  await gasService.generateGasPriceScreenshot()
   console.log('respondiendo')
   ctx.replyWithPhoto({ source: 'gas.png' }, { caption: 'Aqui están los precios.' })
 }
