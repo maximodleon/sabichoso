@@ -25,6 +25,7 @@ const generateWeatherScreenshotForCity = async (cityId) => {
   const template = templateHelper.loadAndRenderTemplate('weather', { icon, city: data.name, forecast: data.weather[0].description, temp: Math.floor(data.main.temp), date: getWeatherDateString(data.dt) })
   const browser = await puppeteer.launch()
   const filename = await browserHelper.generateScreenshot(browser, template, 'div[class="container"]', 0, 'weather.png', 0.9)
+  await browser.close()
   return filename
 }
 
