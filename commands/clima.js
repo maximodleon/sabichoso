@@ -26,8 +26,8 @@ const getWeatherForCity = (bot) => {
     const cityId = ctx.match[1]
     await ctx.deleteMessage()
     await ctx.reply('Buscando')
-    await weatherService.generateWeatherScreenshotForCity(cityId)
-    await ctx.replyWithPhoto({ source: 'weather.png' })
+    const filename = await weatherService.generateWeatherScreenshotForCity(cityId)
+    await ctx.replyWithPhoto({ source: filename })
   })
 }
 

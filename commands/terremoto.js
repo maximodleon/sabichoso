@@ -8,7 +8,7 @@ const getEarthquakeInfo = (bot) => {
 }
 
 const executeCommand = async (ctx) => {
-  const results = earthquakeService.getEarthquakeInfo()
+  const results = await earthquakeService.getEarthquakeInfo()
   if (results.length) {
     ctx.replyWithPhoto({ url: results.mapImage },
       {

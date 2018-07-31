@@ -20,6 +20,7 @@ const generateScreenshot = async (browser, html, selector, padding = 0, filename
     }
   })
   await page.close()
+  return filename
 }
 
 const setupPageLoading = (page) => {
