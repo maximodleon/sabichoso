@@ -1,8 +1,9 @@
 require('dotenv').config()
 const axios = require('axios')
-const { EARTHQUAKE_API_URL, MIN_EARTHQUAKE_MAGNITUDE } = process.env
 
 /* DR coordinates */
+const EARTHQUAKE_API_URL = 'https://earthquake.usgs.gov/fdsnws/event/1/query'
+const MIN_EARTHQUAKE_MAGNITUDE = 4.5
 const LATITUDE = 18.735693
 const LONGITUDE = -70.162651
 const MAX_RADIUS = 5

@@ -1,4 +1,4 @@
-const phrases = require('../phrases.json')
+const phrases = require('../assets/phrases.json')
 require('dotenv').config()
 const { BOT_NAME } = process.env
 

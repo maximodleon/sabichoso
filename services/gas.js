@@ -7,7 +7,8 @@ const generateGasPriceScreenshot = async () => {
   const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const { table, caption } = await getTableAndCaption(browser)
   const template = templateHelper.loadAndRenderTemplate('gas', { table, caption })
-  const filename = await browserHelper.generateScreenshot(browser, template, 'div', 2, 'gas.png')
+  const options = { selector: 'div', padding: 2, filename: 'gas.png', scaleFactor: 2 }
+  const filename = await browserHelper.generateScreenshot(browser, template, options)
   await browser.close()
   return filename
 }
