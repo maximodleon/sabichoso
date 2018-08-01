@@ -1,6 +1,7 @@
 const wiki = require('wikipediajs')
 const Markup = require('telegraf/markup')
 
+const BASE_URL = 'https://es.wikipedia.org/wiki?curid='
 const getWikiArticles = (bot) => {
   bot.command('wiki', async (ctx) => {
     const word = ctx.message.text.substr(ctx.message.text.indexOf(' '))
@@ -11,19 +12,17 @@ const getWikiArticles = (bot) => {
     if (keys.length === 1) {
       ctx.reply(query.page[keys[0]].fullurl)
     } else if (keys.length > 1) {
-      const buttons = keys.map((key) => [Markup.callbackButton(query.pages[key].title, `wiki:${query.pages[key].fullurl}`)])
-      console.log(buttons)
+      const buttons = keys.map((key) => [Markup.callbackButton(query.pages[key].title, `wiki:${key}`)])
       const keyboard = Markup.inlineKeyboard(buttons)
+      ctx.message.state = { pages: query.pages }
       ctx.reply('encontre varios, cual de estos?', keyboard.resize().extra())
     }
   })
 
-  bot.action(/wiki:(.+)/g, async (ctx) => {
-    const articleUrl = ctx.match[1]
-    try {
+  bot.action(/wiki:(\d+)/g, async (ctx) => {
+    const articleId = ctx.match[1]
     await ctx.deleteMessage()
-    } catch(error) { }
-    await ctx.reply(articleUrl)
+    await ctx.reply(`${BASE_URL}${articleId}`)
   })
 }
 
