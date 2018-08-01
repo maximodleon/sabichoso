@@ -6,6 +6,8 @@ const weatherService = require('../services/weather')
 
 const executeCommand = async (ctx) => {
   const searchCity = ctx.message.text.replace('/clima', '').trim().toLowerCase()
+  if (!searchCity.length) return ctx.reply('Tiene que especificar una ciudad')
+
   const cities = cityList.filter((city) => city.name.toLowerCase() === searchCity)
   if (cities.length > 1) {
     const results = cities.map((city) => Markup.callbackButton(city.country, `weather:${city.id}`))
