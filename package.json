@@ -26,7 +26,8 @@
     "mustache": "2.3.0",
     "npm": "6.2.0",
     "puppeteer": "1.6.0",
-    "telegraf": "3.21.2"
+    "telegraf": "3.21.2",
+    "wikipediajs": "^1.4.0"
   },
   "devDependencies": {
     "commitizen": "2.10.1",
@@ -43,9 +44,9 @@
     "travis-deploy-once": "^5.0.1"
   },
   "config": {
-   "commitizen": {
-    "path": "node_modules/cz-conventional-changelog"
-   }
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "repository": {
     "type": "git",
