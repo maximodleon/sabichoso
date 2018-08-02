@@ -22,7 +22,7 @@ const executeCommand = async (ctx) => {
 }
 
 const getWeatherForCity = (bot) => {
-  const commands = ['clima']
+  const commands = ['clima', `clima@${BOT_NAME}`]
   bot.command(commands, executeCommand)
   bot.action(/weather:(\d+)/g, async (ctx) => {
     const cityId = ctx.match[1]
