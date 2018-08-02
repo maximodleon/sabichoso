@@ -5,7 +5,6 @@ const templateHelper = require('../helpers/templates-helper')
 const browserHelper = require('../helpers/browser-helper')
 const dateHelper = require('../helpers/dates-helper')
 const fs = require('fs')
-const puppeteer = require('puppeteer')
 const { WEATHER_API_KEY } = process.env
 
 const getWeatherCondition = async (extraParams) => {
@@ -23,10 +22,8 @@ const generateWeatherScreenshotForCity = async (cityId) => {
   const { data } = await getWeatherCondition({ id: cityId })
   const icon = fs.readFileSync(`./assets/icons/${data.weather[0].icon}.svg`)
   const template = templateHelper.loadAndRenderTemplate('weather', { icon, city: data.name, forecast: data.weather[0].description, temp: Math.floor(data.main.temp), date: getWeatherDateString(data.dt) })
-  const browser = await puppeteer.launch()
   const options = { selector: 'div[class="container"]', padding: 0, filename: 'weather.png', scaleFactor: 0.9 }
-  const filename = await browserHelper.generateScreenshot(browser, template, options)
-  await browser.close()
+  const filename = await browserHelper.generateScreenshot(template, options)
   return filename
 }
 

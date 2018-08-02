@@ -6,10 +6,10 @@ const GAS_PRICE_URL = 'https://micm.gob.do/precios-de-combustibles'
 const generateGasPriceScreenshot = async () => {
   const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const { table, caption } = await getTableAndCaption(browser)
+  await browser.close()
   const template = templateHelper.loadAndRenderTemplate('gas', { table, caption })
   const options = { selector: 'div', padding: 2, filename: 'gas.png', scaleFactor: 2 }
-  const filename = await browserHelper.generateScreenshot(browser, template, options)
-  await browser.close()
+  const filename = await browserHelper.generateScreenshot(template, options)
   return filename
 }
 

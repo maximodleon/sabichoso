@@ -1,3 +1,4 @@
+const puppeteer = require('puppeteer')
 const DEFAULT_OPTIONS = {
   selector: 'body',
   padding: 0,
@@ -5,7 +6,8 @@ const DEFAULT_OPTIONS = {
   scaleFactor: 2
 }
 
-const generateScreenshot = async (browser, html, options = DEFAULT_OPTIONS) => {
+const generateScreenshot = async (html, options = DEFAULT_OPTIONS) => {
+  const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const page = await browser.newPage()
   await page.setViewport({ width: 1000, height: 600, deviceScaleFactor: options.scaleFactor }) // hit desktop breakpoint
   await page.goto(`data:text/html;charset=UTF-8,${html}`)
@@ -26,6 +28,7 @@ const generateScreenshot = async (browser, html, options = DEFAULT_OPTIONS) => {
     }
   })
   await page.close()
+  await browser.close()
   return options.filename
 }
 
