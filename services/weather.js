@@ -22,7 +22,7 @@ const generateWeatherScreenshotForCity = async (cityId) => {
   const { data } = await getWeatherCondition({ id: cityId })
   const icon = fs.readFileSync(`./assets/icons/${data.weather[0].icon}.svg`)
   const template = templateHelper.loadAndRenderTemplate('weather', { icon, city: data.name, forecast: data.weather[0].description, temp: Math.floor(data.main.temp), date: getWeatherDateString(data.dt) })
-  const options = { selector: 'div[class="container"]', padding: 0, filename: 'weather.png', scaleFactor: 0.9 }
+  const options = { selector: 'div[class="container"]', scaleFactor: 0.9 }
   const filename = await browserHelper.generateScreenshot(template, options)
   return filename
 }
