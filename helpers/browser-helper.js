@@ -2,34 +2,34 @@ const puppeteer = require('puppeteer')
 const DEFAULT_OPTIONS = {
   selector: 'body',
   padding: 0,
-  filename: 'default',
   scaleFactor: 2
 }
 
-const generateScreenshot = async (html, options = DEFAULT_OPTIONS) => {
+const generateScreenshot = async (html, options) => {
+  const screenshotOptions = Object.assign({filename: `${Math.random().toString(36).substring(2)}.png`}, DEFAULT_OPTIONS, options)
   const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const page = await browser.newPage()
-  await page.setViewport({ width: 1000, height: 600, deviceScaleFactor: options.scaleFactor }) // hit desktop breakpoint
+  await page.setViewport({ width: 1000, height: 600, deviceScaleFactor: screenshotOptions.scaleFactor }) // hit desktop breakpoint
   await page.goto(`data:text/html;charset=UTF-8,${html}`)
   const rect = await page.evaluate(selector => {
     const element = document.querySelector(selector)
     const { x, y, width, height } = element.getBoundingClientRect()
     return { left: x, top: y, width, height }
-  }, options.selector)
+  }, screenshotOptions.selector)
 
   await page.screenshot({
-    path: options.filename,
+    path: screenshotOptions.filename,
     ommitBackground: true,
     clip: {
-      x: rect.left - options.padding,
-      y: rect.top - options.padding,
-      width: rect.width + options.padding * 2,
-      height: rect.height + options.padding * 2
+      x: rect.left - screenshotOptions.padding,
+      y: rect.top - screenshotOptions.padding,
+      width: rect.width + screenshotOptions.padding * 2,
+      height: rect.height + screenshotOptions.padding * 2
     }
   })
   await page.close()
   await browser.close()
-  return options.filename
+  return screenshotOptions.filename
 }
 
 const setupPageLoading = (page) => {

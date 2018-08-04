@@ -30,7 +30,8 @@ const getEarthquakeInfo = async () => {
     const details = await axios.get(properties.detail)
     const { data } = details
     const place = properties.place.substring(properties.place.indexOf('of') + 3)
-    const mapImage = data.properties.products.dyfi[0].contents[`us${properties.code}_ciim.jpg`]
+    const { properties: { products: { dyfi } } } = data
+    const mapImage = dyfi ? dyfi[0].contents[`us${properties.code}_ciim.jpg`] : {}
     const info = {
       magnitude: properties.mag,
       place,

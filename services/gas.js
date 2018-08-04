@@ -8,7 +8,7 @@ const generateGasPriceScreenshot = async () => {
   const { table, caption } = await getTableAndCaption(browser)
   await browser.close()
   const template = templateHelper.loadAndRenderTemplate('gas', { table, caption })
-  const options = { selector: 'div', padding: 2, filename: 'gas.png', scaleFactor: 2 }
+  const options = { selector: 'div', padding: 2, scaleFactor: 2 }
   const filename = await browserHelper.generateScreenshot(template, options)
   return filename
 }
