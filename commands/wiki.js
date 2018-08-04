@@ -4,8 +4,15 @@ const Markup = require('telegraf/markup')
 const executeCommand = async (ctx) => {
   const { message: { text } } = ctx
   const word = text.substr(text.indexOf(' '))
-  const { query: { pages } } = await wiki.search(word, 'es')
-  if (!pages) return ctx.reply('no hay resultados para esa busqueda')
+  let pages
+  try {
+    const { query } = await wiki.search(word, 'es')
+    pages = query.pages
+  } catch (error) {
+    ctx.reply('oops..Ha habido un error buscando la información. Por favor intenta en unos minutos')
+    throw error
+  }
+  if (!pages) return ctx.reply('no hay resultados para esa búsqueda')
 
   const keys = Object.keys(pages)
   if (keys.length === 1) {
@@ -26,7 +33,9 @@ const getWikiArticles = (bot) => {
 
   bot.action(/wiki:([a-zA-Z0-9_.()áéíóú]+)/gi, async (ctx) => {
     const article = ctx.match[1]
-    await ctx.deleteMessage()
+    try {
+      await ctx.deleteMessage()
+    } catch (error) { console.log('error deleting wiki artcile message') }
     await ctx.reply(`https://es.wikipedia.org/wiki/${article}`)
   })
 }

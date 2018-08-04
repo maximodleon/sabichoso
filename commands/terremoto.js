@@ -12,7 +12,13 @@ const executeCommand = async (ctx) => {
   if (magnitude) {
     if (Number.parseFloat(magnitude).toString() === Number.NaN.toString()) return ctx.reply('Tienes que introducir un número para la magnitud')
   }
-  const results = await earthquakeService.getEarthquakeInfo(magnitude)
+  let results
+  try {
+    results = await earthquakeService.getEarthquakeInfo(magnitude)
+  } catch (error) {
+    ctx.reply('oops...Ha ocurrido un problema buscando la información. Por favor intenta en unos minutos')
+    throw error
+  }
   if (results.length) {
     const caption = results.map((earthquake) => `Terremoto de magnitud *${earthquake.magnitude}* en *${earthquake.place}* para más detalles presiona [aqui](${earthquake.detailsUrl})`).join('\n\n')
     ctx.replyWithMarkdown(caption)

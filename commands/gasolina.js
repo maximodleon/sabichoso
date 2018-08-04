@@ -10,9 +10,13 @@ const getGasPrices = (bot) => {
 
 const executeCommand = async (ctx) => {
   ctx.reply('déjame buscarlo y te lo mando...')
-  console.log('ejecutando el comando gasolina...')
-  const filename = await gasService.generateGasPriceScreenshot()
-  console.log('respondiendo')
+  let filename
+  try {
+    filename = await gasService.generateGasPriceScreenshot()
+  } catch (error) {
+    ctx.reply('oops..Ha ocurrido un error buscando la información. Por favor intenta en unos minutos')
+    throw error
+  }
   ctx.replyWithPhoto({ source: filename }, { caption: 'Aqui están los precios.' })
 }
 
