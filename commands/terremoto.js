@@ -19,7 +19,7 @@ const executeCommand = async (ctx) => {
         parse_mode: 'Markdown'
       })
   } else {
-    ctx.reply('No han habido terremotos en las últimas 24 horas')
+					ctx.reply('No han habido terremotos de magnitud menor o igual a 4.5 en las últimas 24 horas')
   }
 }
 
