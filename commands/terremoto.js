@@ -8,18 +8,22 @@ const getEarthquakeInfo = (bot) => {
 }
 
 const executeCommand = async (ctx) => {
-  const results = await earthquakeService.getEarthquakeInfo()
+  const magnitude = ctx.message.text.split(' ')[1]
+  if (magnitude) {
+    if (Number.parseFloat(magnitude).toString() === Number.NaN.toString()) return ctx.reply('Tienes que introducir un número para la magnitud')
+  }
+  let results
+  try {
+    results = await earthquakeService.getEarthquakeInfo(magnitude)
+  } catch (error) {
+    ctx.reply('oops...Ha ocurrido un problema buscando la información. Por favor intenta en unos minutos')
+    throw error
+  }
   if (results.length) {
-    const caption = `Terremoto de magnitud *${results[0].magnitude}* en *${results[0].place}* para más detalles presiona [aqui](${results[0].detailsUrl})`
-    if (!results.mapImage) return ctx.replyWithMarkdown(caption)
-
-    ctx.replyWithPhoto({ url: results.mapImage },
-      {
-        caption,
-        parse_mode: 'Markdown'
-      })
+    const caption = results.map((earthquake) => `Terremoto de magnitud *${earthquake.magnitude}* en *${earthquake.place}* para más detalles presiona [aqui](${earthquake.detailsUrl})`).join('\n\n')
+    ctx.replyWithMarkdown(caption)
   } else {
-					ctx.reply('No han habido terremotos de magnitud menor o igual a 4.5 en las últimas 24 horas')
+    ctx.reply('No han habido terremotos de magnitud menor o igual a 4.5 en las últimas 24 horas')
   }
 }
 

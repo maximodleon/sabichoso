@@ -13,10 +13,17 @@ const executeCommand = async (ctx) => {
   if (cities.length > 1) {
     const results = cities.map(getCallbackButton)
     const keyboard = Markup.inlineKeyboard(getSlicedArray(results))
-    ctx.reply('de que pais', keyboard.resize().extra())
+    ctx.reply('¿De cuál país?', keyboard.resize().extra())
   } else if (cities.length === 1) {
-    await weatherService.generateWeatherScreenshotForCity(cities[0].id)
-    await ctx.replyWithPhoto({ source: 'weather.png' })
+    let source
+    try {
+      source = await weatherService.generateWeatherScreenshotForCity(cities[0].id)
+    } catch (error) {
+      ctx.reply('oops.. Ha ocurrido un error, por favor intenta de nuevo en un momento')
+      throw error
+    }
+
+    await ctx.replyWithPhoto({ source })
   } else {
     await ctx.reply('No encuentro esa ciudad')
   }
@@ -27,10 +34,18 @@ const getWeatherForCity = (bot) => {
   bot.command(commands, executeCommand)
   bot.action(/weather:(\d+)/g, async (ctx) => {
     const cityId = ctx.match[1]
-    await ctx.deleteMessage()
+    try {
+      await ctx.deleteMessage()
+    } catch (error) { console.log('error deleting message for weather') }
     await ctx.reply('Buscando')
-    const filename = await weatherService.generateWeatherScreenshotForCity(cityId)
-    await ctx.replyWithPhoto({ source: filename })
+    let source
+    try {
+      source = await weatherService.generateWeatherScreenshotForCity(cityId)
+    } catch (error) {
+      ctx.reply('oops..Ha occurido un error. Por favor intenta en un momento')
+      throw error
+    }
+    await ctx.replyWithPhoto({ source })
   })
 }
 
