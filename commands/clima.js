@@ -2,6 +2,7 @@ require('dotenv').config()
 const Markup = require('telegraf/markup')
 const { BOT_NAME } = process.env
 const cityList = require('../assets/city.list.json')
+const countryList = require('../assets/countries.json')
 const weatherService = require('../services/weather')
 
 const executeCommand = async (ctx) => {
@@ -10,7 +11,7 @@ const executeCommand = async (ctx) => {
 
   const cities = cityList.filter((city) => city.name.toLowerCase() === searchCity)
   if (cities.length > 1) {
-    const results = cities.map((city) => Markup.callbackButton(city.country, `weather:${city.id}`))
+    const results = cities.map(getCallbackButton)
     const keyboard = Markup.inlineKeyboard(getSlicedArray(results))
     ctx.reply('de que pais', keyboard.resize().extra())
   } else if (cities.length === 1) {
@@ -31,6 +32,11 @@ const getWeatherForCity = (bot) => {
     const filename = await weatherService.generateWeatherScreenshotForCity(cityId)
     await ctx.replyWithPhoto({ source: filename })
   })
+}
+
+const getCallbackButton = (city) => {
+  const countryName = countryList.filter((country) => country.Code === city.country)
+  return Markup.callbackButton(countryName[0].Name, `weather:${city.id}`)
 }
 
 const getSlicedArray = (resultsArray) => {
