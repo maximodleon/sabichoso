@@ -10,9 +10,12 @@ const getEarthquakeInfo = (bot) => {
 const executeCommand = async (ctx) => {
   const results = await earthquakeService.getEarthquakeInfo()
   if (results.length) {
+    const caption = `Terremoto de magnitud *${results[0].magnitude}* en *${results[0].place}* para más detalles presiona [aqui](${results[0].detailsUrl})`
+    if (!results.mapImage) return ctx.replyWithMarkdown(caption)
+
     ctx.replyWithPhoto({ url: results.mapImage },
       {
-        caption: `Terremoto de magnitud *${results.magnitude}* en *${results.place}* para más detalles presiona [aqui](${results.detailsUrl})`,
+        caption,
         parse_mode: 'Markdown'
       })
   } else {

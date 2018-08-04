@@ -3,7 +3,7 @@ const axios = require('axios')
 
 /* DR coordinates */
 const EARTHQUAKE_API_URL = 'https://earthquake.usgs.gov/fdsnws/event/1/query'
-const MIN_EARTHQUAKE_MAGNITUDE = 4.5
+const MIN_EARTHQUAKE_MAGNITUDE = 3.0
 const LATITUDE = 18.735693
 const LONGITUDE = -70.162651
 const MAX_RADIUS = 5
@@ -30,7 +30,8 @@ const getEarthquakeInfo = async () => {
     const details = await axios.get(properties.detail)
     const { data } = details
     const place = properties.place.substring(properties.place.indexOf('of') + 3)
-    const mapImage = data.properties.products.dyfi[0].contents[`us${properties.code}_ciim.jpg`]
+    const { properties: { products: { dyfi } } } = data
+    const mapImage = dyfi ? dyfi[0].contents[`us${properties.code}_ciim.jpg`] : {}
     const info = {
       magnitude: properties.mag,
       place,
