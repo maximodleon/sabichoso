@@ -9,14 +9,14 @@ const LONGITUDE = -70.162651
 const MAX_RADIUS = 5
 const FORMAT = 'geojson'
 
-const getEarthquakeInfo = async () => {
+const getEarthquakeInfo = async (magnitude) => {
   const dates = getDates()
   const params = {
     format: FORMAT,
     longitude: LONGITUDE,
     latitude: LATITUDE,
     maxradius: MAX_RADIUS,
-    minmagnitude: MIN_EARTHQUAKE_MAGNITUDE,
+    minmagnitude: magnitude || MIN_EARTHQUAKE_MAGNITUDE,
     starttime: dates.today,
     endtime: dates.tomorrow
   }
