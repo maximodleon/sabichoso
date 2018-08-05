@@ -12,10 +12,17 @@ const scrapeMovieInfo = async () => {
       const page = await browser.newPage()
       await page.goto(item.link[0])
 
+      const title = await page.evaluate(() => {
+        return document.querySelector('div[class="small-12 medium-8 large-8 columns"]>h1').innerText
+      })
+      const description = await page.evaluate(() => {
+        return document.querySelector('div[class="small-12 medium-8 large-8 columns"] > p:last-child').innerText
+      })
       const movieDetail = await page.evaluate(evaluateMoviePage)
 
       const movie = {
-        title: item.title[0],
+        title,
+        description,
         trailer: item.guid[0],
         link: item.link[0],
         estreno: item.category[0] === 'ESTRENO',
