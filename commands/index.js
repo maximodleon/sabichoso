@@ -5,6 +5,7 @@ const clima = require('./clima')
 const ayuda = require('./ayuda')
 const wiki = require('./wiki')
 const cine = require('./cine')
+const rae = require('./rae')
 
 const initCommands = (bot) => {
   gasolina.getGasPrices(bot)
@@ -14,6 +15,7 @@ const initCommands = (bot) => {
   ayuda.getHelp(bot)
   wiki.getWikiArticles(bot)
   cine.getMovieListings(bot)
+  rae.searchWord(bot)
 }
 
 module.exports = {
