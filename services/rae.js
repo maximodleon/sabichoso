@@ -1,5 +1,6 @@
 require('dotenv').config()
 const axios = require('axios')
+const memoize = require('memoizee')
 const { parseString } = require('xml2js')
 const { RAE_TOKEN } = process.env
 
@@ -7,6 +8,16 @@ const BASE_ENDPOINT = 'https://dle.rae.es/data'
 const RAE_SEARCH_ENDPOINT = `${BASE_ENDPOINT}/search`
 const RAE_FETCH_ENDPOINT = `${BASE_ENDPOINT}/fetch`
 const headers = { Authorization: `Basic ${RAE_TOKEN}`, 'Cache-Control': 'no-cache' }
+
+
+/* maxAge = one week (7 days)
+ * 3600 * 1000 = one hour in miliseconds
+ * a day has 24 hours
+ * and a week has 7 days
+ * which gives 3600 * 100 * 24 * 7 
+ * to get 1 week of caching
+ */
+const maxAge = 3600 * 1000 * 24 * 7
 
 const searchWord = async (word) => {
   const config = Object.assign({}, { headers }, { params: { w: word, m: '10' } })
@@ -57,6 +68,6 @@ const getWordDefinitions = (rss) => {
 }
 
 module.exports = {
-  searchWord,
-  fetchWord
+  searchWord: memoize(searchWord, { promise: true, maxAge }),
+  fetchWord: memoize(fetchWord, { promise: true, maxAge })
 }
