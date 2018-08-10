@@ -5,9 +5,17 @@ const templateHelper = require('../helpers/templates-helper')
 const browserHelper = require('../helpers/browser-helper')
 const dateHelper = require('../helpers/dates-helper')
 const fs = require('fs')
+const memoize = require('memoizee')
 const { WEATHER_API_KEY } = process.env
 
-const getWeatherCondition = async (extraParams) => {
+/* maxAge = one week (3 hours)
+ * 3600 * 1000 = one hour in miliseconds
+ * which gives 3600 * 1000 * 3
+ * to get 3 hours of caching
+ */
+const maxAge = 3600 * 1000 * 3
+
+const _getWeatherCondition = async extraParams => {
   const defaultParams = {
     lang: 'es',
     units: 'metric',
@@ -18,16 +26,27 @@ const getWeatherCondition = async (extraParams) => {
   return axios.get(WEATHER_API_URL, { params })
 }
 
-const generateWeatherScreenshotForCity = async (cityId) => {
+const getWeatherCondition = memoize(_getWeatherCondition, {
+  promise: true,
+  maxAge
+})
+
+const generateWeatherScreenshotForCity = async cityId => {
   const { data } = await getWeatherCondition({ id: cityId })
   const icon = fs.readFileSync(`./assets/icons/${data.weather[0].icon}.svg`)
-  const template = templateHelper.loadAndRenderTemplate('weather', { icon, city: data.name, forecast: data.weather[0].description, temp: Math.floor(data.main.temp), date: getWeatherDateString(data.dt) })
+  const template = templateHelper.loadAndRenderTemplate('weather', {
+    icon,
+    city: data.name,
+    forecast: data.weather[0].description,
+    temp: Math.floor(data.main.temp),
+    date: getWeatherDateString(data.dt)
+  })
   const options = { selector: 'div[class="container"]', scaleFactor: 0.9 }
   const filename = await browserHelper.generateScreenshot(template, options)
   return filename
 }
 
-const getWeatherDateString = (miliseconds) => {
+const getWeatherDateString = miliseconds => {
   const date = new Date(miliseconds * 1000)
   const day = dateHelper.getDayString(date.getDay())
   const month = dateHelper.getMonthString(date.getMonth())

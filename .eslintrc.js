@@ -1,3 +1,7 @@
 module.exports = {
-    "extends": "standard"
-};
+  extends: 'standard',
+  plugins: ['prettier'],
+  rules: {
+    'prettier/prettier': 'error'
+  }
+}

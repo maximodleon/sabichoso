@@ -25,7 +25,7 @@
     "dotenv": "6.0.0",
     "memoizee": "0.4.13",
     "mustache": "2.3.0",
-    "npm": "6.2.0",
+    "npm": "^6.3.0",
     "puppeteer": "1.6.0",
     "telegraf": "3.21.2",
     "wikipediajs": "^1.4.0",
@@ -38,12 +38,18 @@
     "eslint-config-standard": "11.0.0",
     "eslint-plugin-import": "2.13.0",
     "eslint-plugin-node": "7.0.1",
+    "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-promise": "3.8.0",
     "eslint-plugin-standard": "3.1.0",
     "nodemon": "^1.18.3",
+    "prettier": "1.14.2",
     "semantic-release": "^15.8.1",
     "standard": "11.0.1",
     "travis-deploy-once": "^5.0.1"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   },
   "config": {
     "commitizen": {
