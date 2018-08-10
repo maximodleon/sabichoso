@@ -6,7 +6,7 @@ const searchWord = (bot) => {
   bot.action(/rae:([a-zA-Z0-9]+)/, async (ctx) => {
     const wordId = ctx.match[1]
     try {
-     await ctx.deleteMessage()
+      await ctx.deleteMessage()
     } catch (error) { console.log('error deleting message for rae') }
 
     ctx.reply('buscando...')
