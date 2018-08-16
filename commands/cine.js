@@ -18,12 +18,12 @@ const getMovieListings = bot => {
     const movie = ctx.match[1]
     const movieDetails = movieHelper.getMovieDetails(movie)
     await ctx.deleteMessage()
-    await ctx.replyWithPhoto({ url: movieDetails.poster })
-    await ctx.replyWithMarkdown(`${movieDetails.description}`)
     await ctx.replyWithMarkdown(
-      `[Trailer](${movieDetails.trailer})\n\n[Horarios](${
-        movieDetails.link
-      }#horarios)`
+      `[Poster](${movieDetails.poster})\n\n[Trailer](${
+        movieDetails.trailer
+      })\n\n[Horarios](${movieDetails.link}#horarios)\n\n*Sinopsis:*\n\n${
+        movieDetails.description
+      }`
     )
   })
 }
