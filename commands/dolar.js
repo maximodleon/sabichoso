@@ -17,7 +17,7 @@ const executeCommand = ctx => {
 *Compra:* RD$${compra}
 *Venta:* RD$${venta} 
 
-*actualizado:*  _${day}-${month}-${year}_
+*Actualizado:*  _${day}-${month}-${year}_
 `)
 }
 
