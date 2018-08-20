@@ -15,6 +15,11 @@ const { WEATHER_API_KEY } = process.env
  */
 const maxAge = 3600 * 1000 * 3
 
+/**
+ * query OpenWeatherMap's APi for weather conditions
+ * @param {Object} extraParams override information for OpenWeatherMap's api endpoint
+ * @return {Object} weather information
+ */
 const _getWeatherCondition = async extraParams => {
   const defaultParams = {
     lang: 'es',
@@ -31,6 +36,12 @@ const getWeatherCondition = memoize(_getWeatherCondition, {
   maxAge
 })
 
+/*
+ * Generate screenshot with weather information
+ * @function generateWeatherScreenshotForCity
+ * @param {int} cityId id of city from OpenWetherMap's list of ids
+ * @return {String} name of image file generated
+ */
 const generateWeatherScreenshotForCity = async cityId => {
   const { data } = await getWeatherCondition({ id: cityId })
   const icon = fs.readFileSync(`./assets/icons/${data.weather[0].icon}.svg`)
@@ -46,6 +57,12 @@ const generateWeatherScreenshotForCity = async cityId => {
   return filename
 }
 
+/**
+ * transform date from milliseconds to readable date
+ * @function getWeatherDateString
+ * @param {int} miliseconds unix timestamp
+ * @return {String} formatted date
+ */
 const getWeatherDateString = miliseconds => {
   const date = new Date(miliseconds * 1000)
   const day = dateHelper.getDayString(date.getDay())

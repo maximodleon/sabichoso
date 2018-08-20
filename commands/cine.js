@@ -1,11 +1,19 @@
 require('dotenv').config()
 const movieHelper = require('../helpers/movies-helper')
-const Markup = require('telegraf/markup')
+const paging = require('../helpers/pagination-helper')
+
+const callbackButtonsOptions = {
+  callbackText: 'movieTitle',
+  callbackDataPrefix: 'movie',
+  callbackData: 'movieTitle'
+}
 
 const executeCommand = async ctx => {
-  const movies = movieHelper.getMovies()
-  const keyboard = Markup.inlineKeyboard(
-    movies.map(getCallbackButton.bind(null, 'movie'))
+  const keyboard = paging.paginateArray(
+    movieHelper.getMovies(),
+    0,
+    4,
+    callbackButtonsOptions
   )
   await ctx.reply('elige una', keyboard.resize().extra())
 }
@@ -26,10 +34,19 @@ const getMovieListings = bot => {
       }`
     )
   })
-}
 
-const getCallbackButton = (label, movieTitle) => {
-  return [Markup.callbackButton(movieTitle, `${label}:${movieTitle}`)]
+  bot.action(/moviePage:([0-9]+)/g, async ctx => {
+    const next = Number.parseInt(ctx.match[1])
+
+    const keyboard = paging.paginateArray(
+      movieHelper.getMovies(),
+      next,
+      4,
+      callbackButtonsOptions
+    )
+    await ctx.answerCallbackQuery()
+    await ctx.editMessageReplyMarkup(keyboard)
+  })
 }
 
 module.exports = {

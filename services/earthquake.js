@@ -9,7 +9,13 @@ const LONGITUDE = -70.162651
 const MAX_RADIUS = 5
 const FORMAT = 'geojson'
 
-const getEarthquakeInfo = async (magnitude) => {
+/**
+ * query USGS earthquake api to get latest earthquakes occuring in/near DR
+ * @function getEarthquakeInfo
+ * @param {int} magnitude magnitude to search for, defaults to 4.5
+ * @return {Object []} object array with the information for each earthquake found
+ */
+const getEarthquakeInfo = async magnitude => {
   const dates = getDates()
   const params = {
     format: FORMAT,
@@ -22,12 +28,16 @@ const getEarthquakeInfo = async (magnitude) => {
   }
 
   const results = await axios.get(EARTHQUAKE_API_URL, { params: { ...params } })
-  const filtered = results.data.features.filter((feature) => feature.properties.place.includes('Dominican Republic'))
+  const filtered = results.data.features.filter(feature =>
+    feature.properties.place.includes('Dominican Republic')
+  )
   const value = []
 
   if (filtered.length) {
-    return filtered.map((earthquake) => {
-      const { properties: { mag, url, place } } = earthquake
+    return filtered.map(earthquake => {
+      const {
+        properties: { mag, url, place }
+      } = earthquake
 
       return {
         magnitude: mag,
@@ -39,6 +49,13 @@ const getEarthquakeInfo = async (magnitude) => {
   return value
 }
 
+/**
+ * Returns an object with dates for today (the day the command is run) and the day after
+ * to filter the results of USGS api
+ * @function getDates
+ *
+ * @return {Object} object containing a key for today's date and the day after date
+ */
 const getDates = () => {
   const today = new Date()
   const todayDay = getDatePart(today.getDay())
@@ -53,7 +70,12 @@ const getDates = () => {
   }
 }
 
-const getDatePart = (part) => {
+/**
+ * prepend 0 if date given is less than 10 (two digits)
+ * @param {String} part date part to check if is greater than 10
+ * @return {String} date part with 0 prepended if needed
+ */
+const getDatePart = part => {
   if (part >= 10) {
     return `${part}`
   } else {
