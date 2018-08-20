@@ -13,6 +13,11 @@ const memoize = require('memoizee')
  */
 const maxAge = 3600 * 1000 * 24 * 3
 
+/**
+ * Generate screenshot form current prices for gas in DR
+ * @function generateGasPriceScreenshot
+ * @return {String} name of image file with screenshot
+ */
 const generateGasPriceScreenshot = async () => {
   const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const { table, caption } = await getTableAndCaption(browser)
@@ -26,6 +31,12 @@ const generateGasPriceScreenshot = async () => {
   return filename
 }
 
+/*
+ * scrape table with gas prices for DR
+ * @function _getTableAndCaption
+ * @param {Promise<Pupeteer.Browser>} browser instance to use for scraping data
+ * @return {Object} scraped table and table caption
+ */
 const _getTableAndCaption = async browser => {
   const page = await browser.newPage()
   browserHelper.setupPageLoading(page)
