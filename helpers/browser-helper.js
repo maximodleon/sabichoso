@@ -5,11 +5,31 @@ const DEFAULT_OPTIONS = {
   scaleFactor: 2
 }
 
+/**
+ * Generate screenshot from html template string
+ * @function generateScreenshot
+ * @param {String} html template to render for screenshot
+ * @params {Object} option override for puppeteer
+ *
+ * @return {String} name of image file created after taking screenshot
+ */
 const generateScreenshot = async (html, options) => {
-  const screenshotOptions = Object.assign({filename: `${Math.random().toString(36).substring(2)}.png`}, DEFAULT_OPTIONS, options)
+  const screenshotOptions = Object.assign(
+    {
+      filename: `${Math.random()
+        .toString(36)
+        .substring(2)}.png`
+    },
+    DEFAULT_OPTIONS,
+    options
+  )
   const browser = await puppeteer.launch({ args: ['--start-maximized'] })
   const page = await browser.newPage()
-  await page.setViewport({ width: 1000, height: 600, deviceScaleFactor: screenshotOptions.scaleFactor }) // hit desktop breakpoint
+  await page.setViewport({
+    width: 1000,
+    height: 600,
+    deviceScaleFactor: screenshotOptions.scaleFactor
+  }) // hit desktop breakpoint
   await page.goto(`data:text/html;charset=UTF-8,${html}`)
   const rect = await page.evaluate(selector => {
     const element = document.querySelector(selector)
@@ -32,7 +52,12 @@ const generateScreenshot = async (html, options) => {
   return screenshotOptions.filename
 }
 
-const setupPageLoading = (page) => {
+/**
+ * Setup network request abortion for unnecessary assets
+ * @function setupPageLoading
+ * @param {Puppeteer.Page} page for which to set requests interception
+ */
+const setupPageLoading = page => {
   page.setRequestInterception(true)
   page.on('request', request => {
     if (
@@ -45,7 +70,9 @@ const setupPageLoading = (page) => {
       request.url().includes('/css')
     ) {
       request.abort()
-    } else { request.continue() }
+    } else {
+      request.continue()
+    }
   })
 }
 
