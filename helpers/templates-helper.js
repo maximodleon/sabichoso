@@ -7,7 +7,6 @@ const TEMPLATES_DIR = 'assets/templates/'
  * @function loadTemplate
  * @param {String} templateName name of template file to load
  * @return {String | Buffer} contents of template file
- *
  */
 const loadTemplate = templateName => {
   try {

@@ -21,7 +21,7 @@ const headers = {
  */
 const maxAge = 3600 * 1000 * 24 * 7
 
-/*
+/**
  * search for fiven word in RAE's dictionary
  * @function searchWord
  * @param {String} word word to search for
@@ -50,7 +50,6 @@ const searchWord = async word => {
  * @function fetchWord
  * @param {String} wordId RAE's word id
  * @return {String} concatenated word defintions
- *
  */
 const fetchWord = async wordId => {
   const config = Object.assign({}, { headers }, { params: { id: wordId } })
@@ -62,7 +61,7 @@ const fetchWord = async wordId => {
  * Pare all definitions returned by the API and return a markdown response
  * with all defintions concatenated
  * @function getWordDefinitions
- * @params {String} xml containing all definitions returned by the API
+ * @param {String} xml containing all definitions returned by the API
  * @return {String} word definitions
  */
 const getWordDefinitions = rss => {

@@ -36,7 +36,7 @@ const getWeatherCondition = memoize(_getWeatherCondition, {
   maxAge
 })
 
-/*
+/**
  * Generate screenshot with weather information
  * @function generateWeatherScreenshotForCity
  * @param {int} cityId id of city from OpenWetherMap's list of ids

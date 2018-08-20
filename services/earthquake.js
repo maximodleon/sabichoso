@@ -53,7 +53,6 @@ const getEarthquakeInfo = async magnitude => {
  * Returns an object with dates for today (the day the command is run) and the day after
  * to filter the results of USGS api
  * @function getDates
- *
  * @return {Object} object containing a key for today's date and the day after date
  */
 const getDates = () => {

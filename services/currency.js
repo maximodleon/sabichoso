@@ -7,7 +7,6 @@ const axios = require('axios')
 /**
  * Get pdf with dolar information from Central Bank of DR to fetch/scrape latest price
  * and write to json file for later usage
- *
  */
 const getDollar = async () => {
   const res = await axios.get(URL, {

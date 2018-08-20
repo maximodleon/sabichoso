@@ -31,7 +31,7 @@ const generateGasPriceScreenshot = async () => {
   return filename
 }
 
-/*
+/**
  * scrape table with gas prices for DR
  * @function _getTableAndCaption
  * @param {Promise<Pupeteer.Browser>} browser instance to use for scraping data

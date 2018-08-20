@@ -11,7 +11,6 @@ const maxAge = 3600 * 1000 * 3
 /**
  * Return titles for all movies store in the database
  * @function getMovies
- *
  * @return {String []} string array with all movie titles from database
  */
 const getMovies = () => {
@@ -21,7 +20,7 @@ const getMovies = () => {
 /**
  * Return details for the given movie title
  * @function getMovieDetails
- * @params {String} title title to search for
+ * @param {String} title title to search for
  * @return {Object} object containing details for the movies, if found.
  */
 const getMovieDetails = title => {
@@ -41,7 +40,6 @@ const getMovieDetails = title => {
  * @function getTheaterForMovie
  * @param {String} title title of the movie to search for
  * @return {String []} String array containing the name of the theaters where the movie is showing
- *
  */
 const getTheaterForMovie = title => {
   const movie = movies.filter(movie => movie.title === title)[0]
@@ -54,7 +52,6 @@ const getTheaterForMovie = title => {
  * @param {String} movieTitle title of the movie to search for
  * @param {String} theaterName name of theater to search in
  * @return {Object []} Array with the hours and day the movie is showing in the theater
- *
  */
 const getShowingForTheater = (movieTitle, theaterName) => {
   const movie = movies.filter(movie => movie.title === movieTitle)[0]

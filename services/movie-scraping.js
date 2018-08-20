@@ -3,7 +3,7 @@ const { get } = require('axios')
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 
-/*
+/**
  * scrape basic movie information for movies showing in DR and writes to
  * a JSON file for later use.
  * @function scrapeMovieInfo
@@ -47,7 +47,7 @@ const scrapeMovieInfo = async () => {
   fs.writeFileSync('movies.json', JSON.stringify(movies))
 }
 
-/*
+/**
  * reads movies rss feed to get movie details urls for later
  * scraping
  * @function getRSS

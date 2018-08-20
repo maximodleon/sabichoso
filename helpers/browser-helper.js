@@ -9,7 +9,7 @@ const DEFAULT_OPTIONS = {
  * Generate screenshot from html template string
  * @function generateScreenshot
  * @param {String} html template to render for screenshot
- * @params {Object} option override for puppeteer
+ * @param {Object} option override for puppeteer
  *
  * @return {String} name of image file created after taking screenshot
  */

@@ -35,6 +35,7 @@ const paginateArray = (
  * @param {int} offset index from where to slice the array
  * @param {int} count how many elements to get from the array
  * @param {String} callbackDataPrefix prefix for inline keyboard callback data
+ * @return {Object []} next and previous buttons objects
  */
 const getNextPrev = (array, offset, count, callbackDataPrefix) => {
   let prev
@@ -62,10 +63,9 @@ const getNextPrev = (array, offset, count, callbackDataPrefix) => {
 
 /**
  * Generate callback buttons for a command
- *
  * @function getCallbackButtons
  * @param {Object [] | String []} array array of element from where to get information for the buttons
- * @params {Object} callbackButtonsOptions configuration object that tells how to get information from array
+ * @param {Object} callbackButtonsOptions configuration object that tells how to get information from array
  * @return {Object []} buttons for the inline keyboard
  */
 const getCallbackButtons = (array, callbackButtonsOptions) => {
