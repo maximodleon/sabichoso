@@ -41,7 +41,44 @@ const getMonthString = month => {
   return days[month]
 }
 
+/**
+ * Convert hour from 24-hour format to 12-hour format
+ * @function
+ * @params {Number.int} hour of the day in 24 hour format
+ * @return {string} formatted hour
+ */
+const getHour = hour => {
+  if (hour > 12) {
+    const newHour = hour - 12
+    if (newHour < 10) {
+      return `0${newHour}`
+    }
+    return newHour
+  } else {
+    if (hour < 12) {
+      return `0${hour}`
+    }
+    return hour
+  }
+}
+
+/**
+ * Prepend 0 to minutes param
+ * @function
+ * @param {Number.int} minutes
+ * @return {string} formatted minutes
+ */
+const getMinutes = minutes => {
+  if (minutes < 10) {
+    return `0${minutes}`
+  }
+
+  return minutes
+}
+
 module.exports = {
   getDayString,
-  getMonthString
+  getMonthString,
+  getHour,
+  getMinutes
 }
