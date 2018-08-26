@@ -18,7 +18,7 @@ body {
   grid-template-rows: 100px 200px auto;
   background: linear-gradient(to bottom, #49c0f0 0%,#2cafe3 100%);
   width: 500px;
-  height: 470px;
+  height: 590px;
   justify-items: center;
 }
 
@@ -67,6 +67,31 @@ svg {
   fill: white;
   width: 100px;
 }
+
+.forecasts {
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr;
+   border-top: 2px solid white;
+   width: 100%;
+}
+
+.forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4px 0 0 0;
+  padding: 15px;
+}
+
+.forecast > svg {
+  width: 50px;
+  margin: 7px 0;
+}
+
+h3 {
+  color: white;
+  font-size: 22px;
+}
 </style>
 </head>
 <body>
@@ -79,6 +104,15 @@ svg {
   <div class="description">
     {{{icon}}}
     <h5 class="description">{{forecast}}</h5>
+  </div>
+  <div class="forecasts">
+  {{#forecasts}}
+   <div class="forecast">
+     <h3> {{hour}} </h3> 
+     {{{icon}}}
+     <h3>{{temp}}&#176;</h3> 
+    </div> 
+  {{/forecasts}}
   </div>
 </div>
 </body>
