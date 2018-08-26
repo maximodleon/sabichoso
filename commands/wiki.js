@@ -11,8 +11,8 @@ const memoize = require('memoizee')
  */
 const maxAge = 3600 * 1000 * 24 * 7
 
-const _searchWiki = async word => {
-  return wiki.search(word, 'es')
+const _searchWiki = async (word, options) => {
+  return wiki.search(word, 'es', options)
 }
 
 const searchWiki = memoize(_searchWiki, { promise: true, maxAge })
@@ -24,8 +24,10 @@ const executeCommand = async ctx => {
   const word = text.substr(text.indexOf(' '))
   let pages
   try {
-    const { query } = await searchWiki(word)
+    const { query, continue: nextPage } = await searchWiki(word)
     pages = query.pages
+    ctx.session.wikiNextPage = nextPage
+    ctx.session.wikiSearchWord = word
   } catch (error) {
     ctx.reply(
       'oops..Ha habido un error buscando la información. Por favor intenta en unos minutos'
@@ -38,13 +40,13 @@ const executeCommand = async ctx => {
   if (keys.length === 1) {
     ctx.reply(pages[keys[0]].fullurl)
   } else if (keys.length > 1) {
-    const buttons = keys.map(key => {
-      const data = `wiki:${pages[key].title.replace(/\s/g, '_')}`
-      const text = pages[key].title
-      return [Markup.callbackButton(text, data)]
-    })
-    const keyboard = Markup.inlineKeyboard(buttons)
-    ctx.reply('encontre varios, cual de estos?', keyboard.resize().extra())
+    const buttons = keys.map(mapPageSearchResults.bind(null, pages))
+    let nextButton = []
+    if (ctx.session.wikiNextPage) {
+      nextButton = [Markup.callbackButton('Sig >>  ', 'wikiNext')]
+    }
+    const keyboard = Markup.inlineKeyboard(buttons.concat([nextButton]))
+    ctx.reply('encontre varios, ¿cuál de estos?', keyboard.resize().extra())
   }
 }
 
@@ -56,10 +58,44 @@ const getWikiArticles = bot => {
     try {
       await ctx.deleteMessage()
     } catch (error) {
-      console.log('error deleting wiki artcile message')
+      console.log('error deleting wiki article message')
     }
     await ctx.reply(`https://es.wikipedia.org/wiki/${article}`)
   })
+
+  bot.action('wikiNext', async ctx => {
+    let pages
+    let nextPage
+    try {
+      const { query, continue: next } = await searchWiki(
+        ctx.session.wikiSearchWord,
+        ctx.session.wikiNextPage
+      )
+      pages = query.pages
+      nextPage = next
+    } catch (error) {
+      await ctx.deleteMessage()
+      ctx.reply('oops, hubo un error con la operacion')
+      throw error
+    }
+    ctx.session.wikiNextPage = nextPage
+    const buttons = Object.keys(pages).map(
+      mapPageSearchResults.bind(null, pages)
+    )
+    const next = []
+    if (nextPage) {
+      next.push(Markup.callbackButton('Sig >>', 'wikiNext'))
+    }
+    await ctx.answerCallbackQuery()
+    const keyboard = Markup.inlineKeyboard(buttons.concat([next]))
+    await ctx.editMessageReplyMarkup(keyboard)
+  })
+}
+
+const mapPageSearchResults = (pages, key) => {
+  const data = `wiki:${pages[key].title.replace(/\s/g, '_')}`
+  const text = pages[key].title
+  return [Markup.callbackButton(text, data)]
 }
 
 module.exports = {
