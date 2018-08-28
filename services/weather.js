@@ -112,7 +112,6 @@ const getWeatherDateString = miliseconds => {
 const mapForecasts = (forecasts, sliceAmount = 4) => {
   const entries = forecasts.slice(0, sliceAmount)
   return entries.map(forecast => {
-    console.log(new Date(forecast.dt * 1000).toLocaleTimeString())
     return {
       icon: fs.readFileSync(`./assets/icons/${forecast.weather[0].icon}.svg`),
       temp: Math.floor(forecast.main.temp),
