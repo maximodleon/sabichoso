@@ -2,6 +2,7 @@ const { parseString } = require('xml2js')
 const { get } = require('axios')
 const puppeteer = require('puppeteer')
 const fs = require('fs')
+const browserHelper = require('../helpers/browser-helper')
 
 /**
  * scrape basic movie information for movies showing in DR and writes to
@@ -9,25 +10,60 @@ const fs = require('fs')
  * @function scrapeMovieInfo
  */
 const scrapeMovieInfo = async () => {
+  console.log('scraping movies started')
   const browser = await puppeteer.launch()
   const feedItems = await getRSS()
 
+  console.log(`going to scrape ${feedItems.length} movies`)
   const movies = await Promise.all(
     feedItems.map(async item => {
-      const page = await browser.newPage()
-      await page.goto(item.link[0])
+      let page
+      try {
+        page = await browser.newPage()
+        await browserHelper.setupPageLoading(page)
+      } catch (error) {
+        console.log('error opening browser page. Skipping', error)
+        return
+      }
 
-      const title = await page.evaluate(() => {
-        return document.querySelector(
-          'div[class="small-12 medium-8 large-8 columns"]>h1'
-        ).innerText
-      })
-      const description = await page.evaluate(() => {
-        return document.querySelector(
-          'div[class="small-12 medium-8 large-8 columns"] > p:last-child'
-        ).innerText
-      })
-      const movieDetail = await page.evaluate(evaluateMoviePage)
+      try {
+        await page.goto(item.link[0])
+      } catch (error) {
+        console.log('error opening movie detail page. Skipping', error)
+      }
+
+      console.log(`scraping movie at ${item.link}`)
+      let title
+      try {
+        title = await page.evaluate(() => {
+          return document.querySelector(
+            'div[class="small-12 medium-8 large-8 columns"]>h1'
+          ).innerText
+        })
+      } catch (error) {
+        console.log('error getting movie title. Skipping', error)
+        return
+      }
+
+      let description
+      try {
+        description = await page.evaluate(() => {
+          return document.querySelector(
+            'div[class="small-12 medium-8 large-8 columns"] > p:last-child'
+          ).innerText
+        })
+      } catch (error) {
+        console.log('error getting movie description. Skipping', error)
+        return
+      }
+
+      let movieDetail
+      try {
+        movieDetail = await page.evaluate(evaluateMoviePage)
+      } catch (error) {
+        console.log('error getting movie details. Skipping', error)
+        return
+      }
 
       const movie = {
         title,
@@ -43,8 +79,15 @@ const scrapeMovieInfo = async () => {
     })
   )
 
-  await browser.close()
-  fs.writeFileSync('movies.json', JSON.stringify(movies))
+  try {
+    await browser.close()
+  } catch (error) {
+    console.log('error closing browser. Skipping', error)
+    return
+  }
+
+  fs.writeFileSync('./assets/movies.json', JSON.stringify(movies))
+  console.log('movies file written to disk')
 }
 
 /**
@@ -54,6 +97,7 @@ const scrapeMovieInfo = async () => {
  * @return {Object []} RSS feed information
  */
 const getRSS = async () => {
+  console.log('reading movies RSS feed')
   const { data } = await get('http://www.cinema.com.do/rss.php')
   let feed
   parseString(data, (error, json) => {
