@@ -18,6 +18,7 @@ const job = new CronJob('0 */5 * * * *', async () => {
     res = await earthquakeService.getEarthquakeInfo()
   } catch (error) {
     console.log('Error getting earthquake information', error)
+    return
   }
 
   if (res.length) {
