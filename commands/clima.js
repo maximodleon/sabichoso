@@ -25,9 +25,9 @@ const executeCommand = async ctx => {
     const keyboard = paging.paginateArray(results, 0, 4, callbackButtonsOptions)
     ctx.reply('¿De cuál país?', keyboard.resize().extra())
   } else if (cities.length === 1) {
-    let source
+    let results
     try {
-      source = await weatherService.generateWeatherScreenshotForCity(
+      results = await weatherService.generateWeatherScreenshotAndCaptionForCity(
         cities[0].id
       )
     } catch (error) {
@@ -37,7 +37,10 @@ const executeCommand = async ctx => {
       throw error
     }
 
-    await ctx.replyWithPhoto({ source })
+    await ctx.replyWithPhoto(
+      { source: results.filename },
+      { caption: results.caption }
+    )
   } else {
     await ctx.reply('No encuentro esa ciudad')
   }
@@ -72,14 +75,19 @@ const getWeatherForCity = bot => {
       console.log('error deleting message for weather')
     }
     await ctx.reply('Buscando')
-    let source
+    let results
     try {
-      source = await weatherService.generateWeatherScreenshotForCity(cityId)
+      results = await weatherService.generateWeatherScreenshotAndCaptionForCity(
+        cityId
+      )
     } catch (error) {
       ctx.reply('oops..Ha occurido un error. Por favor intenta en un momento')
       throw error
     }
-    await ctx.replyWithPhoto({ source })
+    await ctx.replyWithPhoto(
+      { source: results.filename },
+      { caption: results.caption }
+    )
   })
 }
 

@@ -1,5 +1,7 @@
 const axios = require('axios')
-const WEATHER_API_URL = 'http://api.openweathermap.org/data/2.5/weather'
+const BASE_URL = 'http://api.openweathermap.org/data/2.5'
+const WEATHER_API_URL = `${BASE_URL}/weather`
+const FORECAST_API_URL = `${BASE_URL}/forecast`
 require('dotenv').config()
 const templateHelper = require('../helpers/templates-helper')
 const browserHelper = require('../helpers/browser-helper')
@@ -17,8 +19,8 @@ const maxAge = 3600 * 1000 * 3
 
 /**
  * query OpenWeatherMap's APi for weather conditions
- * @param {Object} extraParams override information for OpenWeatherMap's api endpoint
- * @return {Object} weather information
+ * @param {object} extraParams override information for OpenWeatherMap's api endpoint
+ * @return {Promise} weather information
  */
 const _getWeatherCondition = async extraParams => {
   const defaultParams = {
@@ -37,24 +39,52 @@ const getWeatherCondition = memoize(_getWeatherCondition, {
 })
 
 /**
+ * query OpenWeatherMap's API to get 3 hour forecast
+ * @param {object} extraParams override information for OpenWeatherMap's API endpoint
+ * @return {Promise} forecast information
+ */
+const _getForecastForCity = async extraParams => {
+  const defaultParams = {
+    lang: 'es',
+    units: 'metric',
+    appid: WEATHER_API_KEY
+  }
+
+  const params = Object.assign({}, defaultParams, extraParams)
+  return axios.get(FORECAST_API_URL, { params })
+}
+
+const getForecastForCity = memoize(_getForecastForCity, {
+  promise: true,
+  maxAge
+})
+
+/**
  * Generate screenshot with weather information
  * @function generateWeatherScreenshotForCity
  * @param {int} cityId id of city from OpenWetherMap's list of ids
- * @return {String} name of image file generated
+ * @return {object} object with name of image file and current weather caption
  */
-const generateWeatherScreenshotForCity = async cityId => {
+const generateWeatherScreenshotAndCaptionForCity = async cityId => {
   const { data } = await getWeatherCondition({ id: cityId })
+  const { data: forecast } = await getForecastForCity({ id: cityId })
   const icon = fs.readFileSync(`./assets/icons/${data.weather[0].icon}.svg`)
   const template = templateHelper.loadAndRenderTemplate('weather', {
     icon,
     city: data.name,
     forecast: data.weather[0].description,
     temp: Math.floor(data.main.temp),
-    date: getWeatherDateString(data.dt)
+    date: getWeatherDateString(data.dt),
+    forecasts: mapForecasts(forecast.list)
   })
   const options = { selector: 'div[class="container"]', scaleFactor: 0.9 }
   const filename = await browserHelper.generateScreenshot(template, options)
-  return filename
+  const caption = `El tiempo actual en ${data.name} es ${
+    data.weather[0].description
+  } con temperatura máxima de ${forecast.list[0].main.temp_max} y mínima de ${
+    forecast.list[0].main.temp_min
+  } grados celsius`
+  return { filename, caption }
 }
 
 /**
@@ -72,7 +102,28 @@ const getWeatherDateString = miliseconds => {
   return `${day}, ${month} ${monthDay}`
 }
 
+/**
+ * Map results from forecast api to get only the needed fields
+ * @function
+ * @param {object []} forecasts array results from the forecast api
+ * @param {Number.int} sliceAmount amount of hours to get from forecast results
+ * @return {Object []} mapped results
+ */
+const mapForecasts = (forecasts, sliceAmount = 4) => {
+  const entries = forecasts.slice(0, sliceAmount)
+  return entries.map(forecast => {
+    return {
+      icon: fs.readFileSync(`./assets/icons/${forecast.weather[0].icon}.svg`),
+      temp: Math.floor(forecast.main.temp),
+      hour: new Date(forecast.dt * 1000)
+        .toLocaleTimeString()
+        .replace(/00/g, '')
+        .replace(/:/g, '')
+    }
+  })
+}
+
 module.exports = {
   getWeatherCondition,
-  generateWeatherScreenshotForCity
+  generateWeatherScreenshotAndCaptionForCity
 }

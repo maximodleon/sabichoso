@@ -36,12 +36,13 @@ const getEarthquakeInfo = async magnitude => {
   if (filtered.length) {
     return filtered.map(earthquake => {
       const {
-        properties: { mag, url, place }
+        properties: { mag, url, place, time }
       } = earthquake
 
       return {
         magnitude: mag,
         detailsUrl: url,
+        date: new Date(time),
         place: place.substring(place.indexOf('of') + 3)
       }
     })

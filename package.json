@@ -11,7 +11,12 @@
     "lint:fix": "standard --fix",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "gas": "node jobs/gas.js",
+    "dolar": "node jobs/dolar.js",
+    "earthquake": "node jobs/earthquake.js",
+    "movies": "node jobs/movies.js",
+    "weather": "node jobs/weather.js"
   },
   "keywords": [
     "telegram",
@@ -22,6 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "0.18.0",
+    "cron": "1.4.1",
     "dotenv": "6.0.0",
     "memoizee": "0.4.13",
     "mustache": "2.3.0",
