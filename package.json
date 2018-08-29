@@ -11,7 +11,12 @@
     "lint:fix": "standard --fix",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "gas": "node jobs/gas.js",
+    "dolar": "node jobs/dolar.js",
+    "earthquake": "node jobs/earthquake.js",
+    "movies": "node jobs/movies.js",
+    "weather": "node jobs/weather.js"
   },
   "keywords": [
     "telegram",
