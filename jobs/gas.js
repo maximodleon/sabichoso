@@ -6,7 +6,7 @@ const fs = require('fs')
 const { BOT_TOKEN, LOG_CHAT_ID } = process.env
 
 // run every friday at 12 PM
-const job = new CronJob('0 0 12 * * 4', async () => {
+const job = new CronJob('0 0 12 * * 5', async () => {
   console.log('getting gas prices', new Date().toLocaleString())
 
   const bot = new Telegraf(BOT_TOKEN)
