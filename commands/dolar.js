@@ -1,9 +1,10 @@
-const tasas = require('../assets/tasas.json')
 require('dotenv').config()
+const fs = require('fs')
 const { BOT_NAME } = process.env
 const { getMonthString } = require('../helpers/dates-helper')
 
 const executeCommand = ctx => {
+  const tasas = JSON.parse(fs.readFileSync('assets/tasas.json'))
   const {
     dolar: { compra, venta, actualizado }
   } = tasas
