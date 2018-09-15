@@ -1,4 +1,4 @@
-const movies = require('../assets/movies.json')
+const fs = require('fs')
 const memoize = require('memoizee')
 
 /* maxAge = one week (3 hours)
@@ -14,6 +14,7 @@ const maxAge = 3600 * 1000 * 3
  * @return {String []} string array with all movie titles from database
  */
 const getMovies = () => {
+  const movies = getMoviesFromDisk()
   return movies.map(movie => movie.title)
 }
 
@@ -24,6 +25,7 @@ const getMovies = () => {
  * @return {Object} object containing details for the movies, if found.
  */
 const getMovieDetails = title => {
+  const movies = getMoviesFromDisk()
   return movies.filter(movie => movie.title === title).map(movie => {
     return {
       trailer: movie.trailer,
@@ -42,6 +44,7 @@ const getMovieDetails = title => {
  * @return {String []} String array containing the name of the theaters where the movie is showing
  */
 const getTheaterForMovie = title => {
+  const movies = getMoviesFromDisk()
   const movie = movies.filter(movie => movie.title === title)[0]
   return Object.keys(movie.showings)
 }
@@ -54,8 +57,20 @@ const getTheaterForMovie = title => {
  * @return {Object []} Array with the hours and day the movie is showing in the theater
  */
 const getShowingForTheater = (movieTitle, theaterName) => {
+  const movies = getMoviesFromDisk()
   const movie = movies.filter(movie => movie.title === movieTitle)[0]
   return movie.showings[theaterName]
+}
+
+const getMoviesFromDisk = () => {
+  let movies
+  try {
+    movies = fs.readFileSync('assets/movies.json')
+  } catch (error) {
+    console.log('error opening movies file', error)
+    return []
+  }
+  return JSON.parse(movies)
 }
 
 module.exports = {
