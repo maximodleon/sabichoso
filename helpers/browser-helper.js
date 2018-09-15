@@ -23,7 +23,9 @@ const generateScreenshot = async (html, options) => {
     DEFAULT_OPTIONS,
     options
   )
-  const browser = await puppeteer.launch({ args: ['--start-maximized'] })
+  const browser = await puppeteer.launch({
+    args: ['--start-maximized', '--no-sandbox']
+  })
   const page = await browser.newPage()
   await page.setViewport({
     width: 1000,

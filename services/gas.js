@@ -19,7 +19,9 @@ const maxAge = 3600 * 1000 * 24 * 3
  * @return {String} name of image file with screenshot
  */
 const generateGasPriceScreenshot = async () => {
-  const browser = await puppeteer.launch({ args: ['--start-maximized'] })
+  const browser = await puppeteer.launch({
+    args: ['--start-maximized', '--no-sandbox']
+  })
   const { table, caption } = await getTableAndCaption(browser)
   await browser.close()
   const template = templateHelper.loadAndRenderTemplate('gas', {
